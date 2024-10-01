@@ -45,7 +45,12 @@ function renderTasks() {
     deleteButton.className = "text-red-500 hover:underline ml-2";
     deleteButton.addEventListener("click", () => deleteTask(index));
 
-    taskItem.append(taskText, completeButton, deleteButton);
+    const editButton = document.createElement("button");
+    editButton.textContent = "Edit";
+    editButton.className = "text-yellow-500 hover:underline ml-2";
+    editButton.addEventListener("click", () => editTask(index));
+
+    taskItem.append(taskText, completeButton, deleteButton , editButton);
     taskList.appendChild(taskItem);
   });
 }
@@ -81,6 +86,26 @@ function deleteTask(index) {
   saveTasks();
   renderTasks();
   showNotification("Task deleted!", "error");
+}
+
+function editTask(index){
+  const existingTask = tasks.find((_,idx)=>idx === index)
+  if(!existingTask){
+    showNotification("Task Not Found!", "error");
+    return;
+  }
+
+  const updatedTask = prompt("Enter updated task name:", existingTask.name);
+  if(updatedTask === null || updatedTask.trim() === ""){
+    showNotification("Task name cannot be empty!", "error");
+    return;
+  }
+
+  existingTask.name = updatedTask;
+  saveTasks();
+  renderTasks();
+  showNotification("Task updated successfully!");
+
 }
 
 addTaskButton.addEventListener("click", addTask);
