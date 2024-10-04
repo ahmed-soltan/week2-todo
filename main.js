@@ -1,4 +1,3 @@
-// Select necessary DOM elements
 const taskInput = document.getElementById("taskInput");
 const addTaskButton = document.getElementById("addTaskButton");
 const taskList = document.getElementById("taskList");
@@ -6,7 +5,7 @@ const notification = document.getElementById("notification");
 
 let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
 
-function showNotification(message, type = "success") {
+const showNotification =(message, type = "success")=> {
   notification.textContent = message;
   notification.className = `p-3 rounded-lg text-white mb-4 ${
     type === "success" ? "bg-green-500" : "bg-red-500"
@@ -18,11 +17,11 @@ function showNotification(message, type = "success") {
   }, 3000);
 }
 
-function saveTasks() {
+const saveTasks = () =>{
   localStorage.setItem("tasks", JSON.stringify(tasks));
 }
 
-function renderTasks() {
+const displayTasks=() =>{
   taskList.innerHTML = "";
 
   tasks.forEach((task, index) => {
@@ -55,7 +54,7 @@ function renderTasks() {
   });
 }
 
-function addTask() {
+const addTask=()=> {
   const taskName = taskInput.value.trim();
 
   if (taskName.trim() === "") {
@@ -66,29 +65,29 @@ function addTask() {
   const newTask = { name: taskName, completed: false };
   tasks.push(newTask);
   saveTasks();
-  renderTasks();
+  displayTasks();
   taskInput.value = "";
   showNotification("Task added successfully!");
 }
 
-function toggleComplete(index) {
+const toggleComplete=(index) =>{
   tasks[index].completed = !tasks[index].completed;
   saveTasks();
-  renderTasks();
+  displayTasks();
   showNotification(
     tasks[index].completed ? "Task completed!" : "Task marked as incomplete.",
     tasks[index].completed ? "success" : "error"
   );
 }
 
-function deleteTask(index) {
+const deleteTask=(index)=> {
   tasks.splice(index, 1);
   saveTasks();
-  renderTasks();
+  displayTasks();
   showNotification("Task deleted!", "error");
 }
 
-function editTask(index){
+const editTask=(index)=>{
   const existingTask = tasks.find((_,idx)=>idx === index)
   if(!existingTask){
     showNotification("Task Not Found!", "error");
@@ -103,7 +102,7 @@ function editTask(index){
 
   existingTask.name = updatedTask;
   saveTasks();
-  renderTasks();
+  displayTasks();
   showNotification("Task updated successfully!");
 
 }
@@ -111,5 +110,5 @@ function editTask(index){
 addTaskButton.addEventListener("click", addTask);
 
 window.onload = () => {
-  renderTasks();
+  displayTasks();
 };
